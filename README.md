@@ -1,26 +1,5 @@
 # data-table-multi-filter
 
-## Project setup
-```
-yarn install
-```
+Sample os how to implement multiple filters for https://vuetifyjs.com/en/components/data-tables
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
+[See a working example here](https://frontid.github.io/vuetify-data-table-multi-filter/)
