@@ -54,46 +54,6 @@ class CustomFilters {
     return filteredItems;
   }
 
-  /**
-   * Helper function. @docme
-   * @param obj
-   * @param path
-   * @param fallback
-   * @returns {*}
-   * @private
-   */
-  _getNestedValue(obj, path, fallback) {
-    const last = path.length - 1;
-
-    if (last < 0) return obj === undefined ? fallback : obj;
-
-    for (let i = 0; i < last; i++) {
-      if (obj == null) {
-        return fallback;
-      }
-      obj = obj[path[i]];
-    }
-
-    if (obj == null) return fallback;
-
-    return obj[path[last]] === undefined ? fallback : obj[path[last]];
-  }
-
-  /**
-   * Helper function. @docme
-   * @param obj
-   * @param path
-   * @param fallback
-   * @returns {*}
-   */
-  _getObjectValueByPath(obj, path, fallback) {
-
-    const self = this;
-    if (!path || path.constructor !== String) return fallback;
-    path = path.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
-    path = path.replace(/^\./, ''); // strip a leading dot
-    return self._getNestedValue(obj, path.split('.'), fallback);
-  }
 }
 
 export { CustomFilters as default };

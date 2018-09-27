@@ -1,154 +1,151 @@
 <template>
+    <v-layout row wrap>
+        <v-flex xs3>
+            <v-text-field
+                    append-icon="search"
+                    label="Filter"
+                    single-line
+                    hide-details
+                    @input="filterSearch"
+            ></v-text-field>
+        </v-flex>
+        <v-flex xs3>
+            <v-select
+                    :items="authors"
+                    label="Author"
+                    @change="filterAuthor"
+            ></v-select>
+        </v-flex>
 
-    <v-container grid-list-md>
-        <v-layout row wrap>
-            <v-flex xs3>
+        <v-flex xs3>
+
+            <v-menu
+                    ref="show_start_date"
+                    :close-on-content-click="false"
+                    v-model="show_start_date"
+                    :nudge-right="40"
+                    :return-value.sync="start_date"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+            >
                 <v-text-field
-                        append-icon="search"
-                        label="Filter"
-                        single-line
-                        hide-details
-                        @input="filterSearch"
+                        slot="activator"
+                        v-model="start_date"
+                        label="From"
+                        prepend-icon="event"
+                        readonly
                 ></v-text-field>
-            </v-flex>
-            <v-flex xs3>
-                <v-select
-                        :items="authors"
-                        label="Author"
-                        @change="filterAuthor"
-                ></v-select>
-            </v-flex>
+                <v-date-picker
+                        v-model="start_date"
+                        @input="filterStartDate"
+                ></v-date-picker>
 
-            <v-flex xs3>
+            </v-menu>
 
-                <v-menu
-                        ref="show_start_date"
-                        :close-on-content-click="false"
-                        v-model="show_start_date"
-                        :nudge-right="40"
-                        :return-value.sync="start_date"
-                        lazy
-                        transition="scale-transition"
-                        offset-y
-                        full-width
-                        min-width="290px"
-                >
-                    <v-text-field
-                            slot="activator"
-                            v-model="start_date"
-                            label="From"
-                            prepend-icon="event"
-                            readonly
-                    ></v-text-field>
-                    <v-date-picker
-                            v-model="start_date"
-                            @input="filterStartDate"
-                    ></v-date-picker>
+        </v-flex>
 
-                </v-menu>
+        <v-flex xs3>
+            <v-menu
+                    ref="show_end_date"
+                    :close-on-content-click="false"
+                    v-model="show_end_date"
+                    :nudge-right="40"
+                    :return-value.sync="end_date"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+            >
+                <v-text-field
+                        slot="activator"
+                        v-model="end_date"
+                        label="To"
+                        prepend-icon="event"
+                        readonly
+                ></v-text-field>
+                <v-date-picker
+                        v-model="end_date"
+                        @input="filterEndDate"
+                ></v-date-picker>
 
-            </v-flex>
+            </v-menu>
+        </v-flex>
 
-            <v-flex xs3>
-                <v-menu
-                        ref="show_end_date"
-                        :close-on-content-click="false"
-                        v-model="show_end_date"
-                        :nudge-right="40"
-                        :return-value.sync="end_date"
-                        lazy
-                        transition="scale-transition"
-                        offset-y
-                        full-width
-                        min-width="290px"
-                >
-                    <v-text-field
-                            slot="activator"
-                            v-model="end_date"
-                            label="To"
-                            prepend-icon="event"
-                            readonly
-                    ></v-text-field>
-                    <v-date-picker
-                            v-model="end_date"
-                            @input="filterEndDate"
-                    ></v-date-picker>
-
-                </v-menu>
-            </v-flex>
-
-            <v-flex xs12>
+        <v-flex xs12>
 
 
-                <v-data-table
-                        v-model="selected"
-                        :headers="headers"
-                        :items="rows"
-                        :pagination.sync="pagination"
-                        select-all
-                        item-key="name"
-                        class="elevation-1"
-                        :rows-per-page-items="[-1]"
-                        :hide-actions=true
-                        :search="filters"
-                        :custom-filter="customFilter"
-                >
-                    <template slot="headers" slot-scope="props">
-                        <tr>
-                            <th>
-                                <v-checkbox
-                                        :input-value="props.all"
-                                        :indeterminate="props.indeterminate"
-                                        primary
-                                        hide-details
-                                        @click.native="toggleAll"
-                                ></v-checkbox>
-                            </th>
-                            <th
-                                    v-for="header in props.headers"
-                                    :key="header.text"
-                                    :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                                    @click="changeSort(header.value)"
-                            >
-                                <v-icon small>arrow_upward</v-icon>
-                                {{ header.text }}
-                            </th>
-                        </tr>
-                    </template>
-                    <template slot="items" slot-scope="props">
-                        <tr :active="props.selected" @click="props.selected = !props.selected">
-                            <td>
-                                <v-checkbox
-                                        :input-value="props.selected"
-                                        primary
-                                        hide-details
-                                ></v-checkbox>
-                            </td>
-                            <td>{{ props.item.name }}</td>
-                            <td class="text-xs-right">{{ props.item.birth_date | formatDate}}</td>
-                            <td class="text-xs-right">{{ props.item.added_by }}</td>
-                        </tr>
-                    </template>
-                </v-data-table>
+            <v-data-table
+                    v-model="selected"
+                    :headers="headers"
+                    :items="rows"
+                    :pagination.sync="pagination"
+                    select-all
+                    item-key="name"
+                    class="elevation-1"
+                    :rows-per-page-items="[-1]"
+                    :hide-actions=true
+                    :search="filters"
+                    :custom-filter="customFilter"
+            >
+                <template slot="headers" slot-scope="props">
+                    <tr>
+                        <th>
+                            <v-checkbox
+                                    :input-value="props.all"
+                                    :indeterminate="props.indeterminate"
+                                    primary
+                                    hide-details
+                                    @click.native="toggleAll"
+                            ></v-checkbox>
+                        </th>
+                        <th
+                                v-for="header in props.headers"
+                                :key="header.text"
+                                :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                                @click="changeSort(header.value)"
+                        >
+                            <v-icon small>arrow_upward</v-icon>
+                            {{ header.text }}
+                        </th>
+                    </tr>
+                </template>
+                <template slot="items" slot-scope="props">
+                    <tr :active="props.selected" @click="props.selected = !props.selected">
+                        <td>
+                            <v-checkbox
+                                    :input-value="props.selected"
+                                    primary
+                                    hide-details
+                            ></v-checkbox>
+                        </td>
+                        <td>{{ props.item.name }}</td>
+                        <td class="text-xs-right">{{ props.item.birth_date | formatDate}}</td>
+                        <td class="text-xs-right">{{ props.item.added_by }}</td>
+                    </tr>
+                </template>
+            </v-data-table>
 
-            </v-flex>
+        </v-flex>
 
-            <v-flex>
+        <v-flex>
 
-                <v-card>
-                    <v-card-title primary-title>
-                        <h3>Filters log:</h3>
-                    </v-card-title>
-                    <ul>
-                        {{filters}}
-                    </ul>
-                </v-card>
+            <v-card>
+                <v-card-title primary-title>
+                    <h3>Filters log:</h3>
+                </v-card-title>
+                <ul>
+                    {{filters}}
+                </ul>
+            </v-card>
 
 
-            </v-flex>
+        </v-flex>
 
-        </v-layout>
-    </v-container>
+    </v-layout>
 </template>
 
 <script>
@@ -226,34 +223,18 @@
     methods: {
 
       customFilter(items, filters, filter, headers) {
+        // Init the filter class.
         const cf = new CustomFilters(items, filters, filter, headers);
 
         // Use regular function(),
         // arrow functions does not allow context binding.
         // Register the global standard filter.
         cf.registerFilter('search', function (searchWord, items) {
-          const self = this;
-          let search = searchWord.toLowerCase();
           if (searchWord.trim() === '') return items;
-          const props = self.headers.map(h => h.value);
 
-          /**
-           * Helper to remove "searchable" columns.
-           * @param array
-           * @param element
-           */
-          function remove(array, element) {
-            const index = array.indexOf(element);
-            array.splice(index, 1);
-          }
-
-          // Since those items has their own filters we
-          // can avoid them on the global search.
-          remove(props, 'birth_date');
-          remove(props, 'added_by');
-
-          console.log(props);
-          return items.filter(item => props.some(prop => self.filter(self._getObjectValueByPath(item, prop), search)));
+          return items.filter(item => {
+            return item.name.toLowerCase().includes(searchWord.toLowerCase());
+          }, searchWord);
         });
 
 
@@ -302,7 +283,7 @@
 
         });
 
-        // Its time to rull all created filters.
+        // Its time to run all created filters.
         // Will be executed in the order thay were defined.
         return cf.runFilters();
       },
