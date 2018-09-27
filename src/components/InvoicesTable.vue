@@ -20,11 +20,55 @@
             </v-flex>
 
             <v-flex xs3>
-                start date
+
+                <v-menu
+                        ref="show_start_date"
+                        :close-on-content-click="false"
+                        v-model="show_start_date"
+                        :nudge-right="40"
+                        :return-value.sync="start_date"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                >
+                    <v-text-field
+                            slot="activator"
+                            v-model="start_date"
+                            label="From"
+                            prepend-icon="event"
+                            readonly
+                    ></v-text-field>
+                    <v-date-picker v-model="start_date" @input="$refs.show_start_date.save(start_date)"></v-date-picker>
+
+                </v-menu>
+
             </v-flex>
 
             <v-flex xs3>
-                end date
+                <v-menu
+                        ref="show_end_date"
+                        :close-on-content-click="false"
+                        v-model="show_end_date"
+                        :nudge-right="40"
+                        :return-value.sync="end_date"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                >
+                    <v-text-field
+                            slot="activator"
+                            v-model="end_date"
+                            label="To"
+                            prepend-icon="event"
+                            readonly
+                    ></v-text-field>
+                    <v-date-picker v-model="end_date" @input="$refs.show_end_date.save(end_date)"></v-date-picker>
+
+                </v-menu>
             </v-flex>
 
             <v-flex xs12>
@@ -93,6 +137,9 @@
                     <ul>
                         <li>Filtered by word: {{filters.search}}</li>
                         <li>Author: {{filters.added_by}}</li>
+                        <li>date: {{date}}</li>
+                        <li>Start date: {{start_date}}</li>
+                        <li>End date: {{end_date}}</li>
                     </ul>
                 </v-card>
 
@@ -108,6 +155,12 @@
 
   export default {
     data: () => ({
+      show_start_date: false,
+      start_date: null,
+
+      show_end_date: false,
+      end_date: null,
+
       filters: {
         search: '',
         added_by: ''
@@ -136,31 +189,31 @@
         {
           value: false,
           name: 'Marcelo Tosco',
-          birth_date: '08/12/1983',
+          birth_date: new Date('1983-08-12T00:00:00Z').toLocaleDateString("es-ES"),
           added_by: 'admin'
         },
         {
           value: false,
           name: 'Carlos Campos',
-          birth_date: '08/12/2010',
+          birth_date: new Date('2010-08-12T00:00:00Z').toLocaleDateString("es-ES"),
           added_by: 'admin'
         },
         {
           value: false,
           name: 'Luis Gonzalez',
-          birth_date: '08/12/1900',
+          birth_date: new Date('2010-01-12T00:00:00Z').toLocaleDateString("es-ES"),
           added_by: 'foo'
         },
         {
           value: false,
           name: 'Keopx',
-          birth_date: '08/12/1000',
+          birth_date: new Date('1983-08-12T00:00:00Z').toLocaleDateString("es-ES"),
           added_by: 'foo'
         },
         {
           value: false,
           name: 'Marco Marocchi',
-          birth_date: '08/12/1882',
+          birth_date: new Date('1983-08-12T00:00:00Z').toLocaleDateString("es-ES"),
           added_by: 'Admin'
         },
 
@@ -227,6 +280,6 @@
       filterAuthor(val) {
         this.filters = CustomFilters.updateFilters(this.filters, {added_by: val});
       }
-    }
+    },
   };
 </script>
