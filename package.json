@@ -1,0 +1,20 @@
+{
+  "name": "data-table-multi-filter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0-rc.1",
+    "vue": "^2.5.17",
+    "vuetify": "^1.2.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.4",
+    "@vue/cli-service": "^3.0.4",
+    "vue-cli-plugin-vuetify": "^0.2.0",
+    "vue-template-compiler": "^2.5.17"
+  }
+}
