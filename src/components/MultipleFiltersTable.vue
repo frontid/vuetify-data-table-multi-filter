@@ -302,10 +302,15 @@
 
         });
 
+        // Its time to rull all created filters.
+        // Will be executed in the order thay were defined.
         return cf.runFilters();
       },
 
 
+      /**
+       * Toggle selected items with the master checkbox.
+       */
       toggleAll() {
         if (this.selected.length) {
           this.selected = [];
@@ -314,6 +319,11 @@
         }
       },
 
+      /**
+       * Column shorting.
+       *
+       * @param column
+       */
       changeSort(column) {
         if (this.pagination.sortBy === column) {
           this.pagination.descending = !this.pagination.descending;
@@ -323,14 +333,23 @@
         }
       },
 
+      /**
+       * Handler when user input something at the "Filter" text field.
+       */
       filterSearch(val) {
         this.filters = CustomFilters.updateFilters(this.filters, {search: val});
       },
 
+      /**
+       * Handler when user  select some author at the "Author" select.
+       */
       filterAuthor(val) {
         this.filters = CustomFilters.updateFilters(this.filters, {added_by: val});
       },
 
+      /**
+       * Handler when select a date on "From" date picker.
+       */
       filterStartDate(val) {
         // Close the date picker.
         this.$refs.show_start_date.save(val);
@@ -340,6 +359,9 @@
         this.filters = CustomFilters.updateFilters(this.filters, {start_date: timestamp});
       },
 
+      /**
+       * Handler when select a date on "To" date picker.
+       */
       filterEndDate(val) {
         // Close the date picker.
         this.$refs.show_end_date.save(val);
@@ -353,6 +375,12 @@
     },
 
     filters: {
+      /**
+       * Format a timestamp into a d/m/yyy (because spanish format).
+       *
+       * @param value
+       * @returns {string}
+       */
       formatDate: function (value) {
         if (!value) return '';
         return new Date(value).toLocaleDateString("es-ES");
