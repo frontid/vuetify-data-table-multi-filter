@@ -1,18 +1,18 @@
 <template>
   <v-app>
     <v-content>
-      <InvoicesTable/>
+      <MultipleFiltersTable/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import InvoicesTable from './components/InvoicesTable'
+import MultipleFiltersTable from '@/components/MultipleFiltersTable'
 
 export default {
   name: 'App',
   components: {
-    InvoicesTable
+    MultipleFiltersTable
   },
   data () {
     return {
