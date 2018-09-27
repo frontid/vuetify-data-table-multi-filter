@@ -40,7 +40,10 @@
                             prepend-icon="event"
                             readonly
                     ></v-text-field>
-                    <v-date-picker v-model="start_date" @input="$refs.show_start_date.save(start_date)"></v-date-picker>
+                    <v-date-picker
+                            v-model="start_date"
+                            @input="filterStartDate"
+                    ></v-date-picker>
 
                 </v-menu>
 
@@ -66,7 +69,10 @@
                             prepend-icon="event"
                             readonly
                     ></v-text-field>
-                    <v-date-picker v-model="end_date" @input="$refs.show_end_date.save(end_date)"></v-date-picker>
+                    <v-date-picker
+                            v-model="end_date"
+                            @input="filterEndDate"
+                    ></v-date-picker>
 
                 </v-menu>
             </v-flex>
@@ -83,8 +89,7 @@
                         item-key="name"
                         class="elevation-1"
                         :rows-per-page-items="[-1]"
-                        hide-actions="true"
-
+                        :hide-actions=true
                         :search="filters"
                         :custom-filter="customFilter"
                 >
@@ -120,7 +125,7 @@
                                 ></v-checkbox>
                             </td>
                             <td>{{ props.item.name }}</td>
-                            <td class="text-xs-right">{{ props.item.birth_date}}</td>
+                            <td class="text-xs-right">{{ props.item.birth_date | formatDate}}</td>
                             <td class="text-xs-right">{{ props.item.added_by }}</td>
                         </tr>
                     </template>
@@ -135,11 +140,7 @@
                         <h3>Filters log:</h3>
                     </v-card-title>
                     <ul>
-                        <li>Filtered by word: {{filters.search}}</li>
-                        <li>Author: {{filters.added_by}}</li>
-                        <li>date: {{date}}</li>
-                        <li>Start date: {{start_date}}</li>
-                        <li>End date: {{end_date}}</li>
+                        {{filters}}
                     </ul>
                 </v-card>
 
@@ -163,7 +164,9 @@
 
       filters: {
         search: '',
-        added_by: ''
+        added_by: '',
+        start_date: null,
+        end_date: null,
       },
       authors: ['Marce', 'Foo'],
       pagination: {
@@ -189,31 +192,31 @@
         {
           value: false,
           name: 'Marcelo Tosco',
-          birth_date: new Date('1983-08-12T00:00:00Z').toLocaleDateString("es-ES"),
+          birth_date: 1538006400000,
           added_by: 'admin'
         },
         {
           value: false,
           name: 'Carlos Campos',
-          birth_date: new Date('2010-08-12T00:00:00Z').toLocaleDateString("es-ES"),
+          birth_date: 1537401600000,
           added_by: 'admin'
         },
         {
           value: false,
           name: 'Luis Gonzalez',
-          birth_date: new Date('2010-01-12T00:00:00Z').toLocaleDateString("es-ES"),
+          birth_date: 1536537600000,
           added_by: 'foo'
         },
         {
           value: false,
           name: 'Keopx',
-          birth_date: new Date('1983-08-12T00:00:00Z').toLocaleDateString("es-ES"),
+          birth_date: 1536364800000,
           added_by: 'foo'
         },
         {
           value: false,
           name: 'Marco Marocchi',
-          birth_date: new Date('1983-08-12T00:00:00Z').toLocaleDateString("es-ES"),
+          birth_date: 1535846400000,
           added_by: 'Admin'
         },
 
@@ -252,6 +255,36 @@
 
         });
 
+        // Use regular function(),
+        // arrow functions does not allow context binding.
+        // Register "start_date" filter.
+        cf.registerFilter('start_date', function (start_date, items) {
+          // If the filter has not been applied yet
+          // just return all available items.
+          if (start_date === null) return items;
+
+          // Compare each item start_date and just return the matching ones.
+          return items.filter(item => {
+            return item.birth_date >= start_date;
+          }, start_date);
+
+        });
+
+        // Use regular function(),
+        // arrow functions does not allow context binding.
+        // Register "end_date" filter.
+        cf.registerFilter('end_date', function (end_date, items) {
+          // If the filter has not been applied yet
+          // just return all available items.
+          if (end_date === null) return items;
+
+          // Compare each item end_date and just return the matching ones.
+          return items.filter(item => {
+            return item.birth_date <= end_date;
+          }, end_date);
+
+        });
+
         return cf.runFilters();
       },
 
@@ -279,7 +312,36 @@
 
       filterAuthor(val) {
         this.filters = CustomFilters.updateFilters(this.filters, {added_by: val});
-      }
+      },
+
+      filterStartDate(val) {
+        // Close the date picker.
+        this.$refs.show_start_date.save(val);
+
+        //Convert the value to a timestamp before saving it.
+        const timestamp = new Date(val + 'T00:00:00Z').getTime();
+        this.filters = CustomFilters.updateFilters(this.filters, {start_date: timestamp});
+      },
+
+      filterEndDate(val) {
+        // Close the date picker.
+        this.$refs.show_end_date.save(val);
+
+        //Convert the value to a timestamp before saving it.
+        const timestamp = new Date(val + 'T00:00:00Z').getTime();
+        this.filters = CustomFilters.updateFilters(this.filters, {end_date: timestamp});
+      },
+
+
     },
+
+    filters: {
+      formatDate: function (value) {
+        if (!value) return '';
+        return new Date(value).toLocaleDateString("es-ES");
+      }
+    }
+
+
   };
 </script>
