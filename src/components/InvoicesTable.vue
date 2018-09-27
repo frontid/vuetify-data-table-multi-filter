@@ -2,8 +2,7 @@
 
     <v-container grid-list-md>
         <v-layout row wrap>
-            <v-flex xs12>
-                <h1>{{filters}}</h1>
+            <v-flex xs3>
                 <v-text-field
                         append-icon="search"
                         label="Filter"
@@ -11,13 +10,23 @@
                         hide-details
                         @input="filterSearch"
                 ></v-text-field>
+            </v-flex>
+            <v-flex xs3>
                 <v-select
                         :items="authors"
                         label="Author"
                         @change="filterAuthor"
                 ></v-select>
-
             </v-flex>
+
+            <v-flex xs3>
+                start date
+            </v-flex>
+
+            <v-flex xs3>
+                end date
+            </v-flex>
+
             <v-flex xs12>
 
 
@@ -74,12 +83,28 @@
                 </v-data-table>
 
             </v-flex>
+
+            <v-flex>
+
+                <v-card>
+                    <v-card-title primary-title>
+                        <h3>Filters log:</h3>
+                    </v-card-title>
+                    <ul>
+                        <li>Filtered by word: {{filters.search}}</li>
+                        <li>Author: {{filters.added_by}}</li>
+                    </ul>
+                </v-card>
+
+
+            </v-flex>
+
         </v-layout>
     </v-container>
 </template>
 
 <script>
-  import CustomFilters from '@/utils/CustomFilters.js';
+  import CustomFilters from '@/plugins/CustomFilters';
 
   export default {
     data: () => ({
@@ -196,11 +221,11 @@
       },
 
       filterSearch(val) {
-        this.filters = CustomFilters.updateFilters(this.filters, { search: val });
+        this.filters = CustomFilters.updateFilters(this.filters, {search: val});
       },
 
       filterAuthor(val) {
-        this.filters = CustomFilters.updateFilters(this.filters, { added_by: val });
+        this.filters = CustomFilters.updateFilters(this.filters, {added_by: val});
       }
     }
   };
