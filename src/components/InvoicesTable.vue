@@ -168,7 +168,7 @@
         start_date: null,
         end_date: null,
       },
-      authors: ['Marce', 'Foo'],
+      authors: ['Admin', 'Foo'],
       pagination: {
         sortBy: 'name'
       },
@@ -236,6 +236,23 @@
           let search = searchWord.toLowerCase();
           if (searchWord.trim() === '') return items;
           const props = self.headers.map(h => h.value);
+
+          /**
+           * Helper to remove "searchable" columns.
+           * @param array
+           * @param element
+           */
+          function remove(array, element) {
+            const index = array.indexOf(element);
+            array.splice(index, 1);
+          }
+
+          // Since those items has their own filters we
+          // can avoid them on the global search.
+          remove(props, 'birth_date');
+          remove(props, 'added_by');
+
+          console.log(props);
           return items.filter(item => props.some(prop => self.filter(self._getObjectValueByPath(item, prop), search)));
         });
 
