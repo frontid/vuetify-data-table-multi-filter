@@ -149,7 +149,7 @@
 </template>
 
 <script>
-  import CustomFilters from '@/plugins/CustomFilters';
+  import MultiFilters from '@/plugins/MultiFilters';
 
   export default {
     data: () => ({
@@ -224,7 +224,7 @@
 
       customFilter(items, filters, filter, headers) {
         // Init the filter class.
-        const cf = new CustomFilters(items, filters, filter, headers);
+        const cf = new this.$MultiFilters(items, filters, filter, headers);
 
         // Use regular function(),
         // arrow functions does not allow context binding.
@@ -318,14 +318,14 @@
        * Handler when user input something at the "Filter" text field.
        */
       filterSearch(val) {
-        this.filters = CustomFilters.updateFilters(this.filters, {search: val});
+        this.filters = MultiFilters.updateFilters(this.filters, {search: val});
       },
 
       /**
        * Handler when user  select some author at the "Author" select.
        */
       filterAuthor(val) {
-        this.filters = CustomFilters.updateFilters(this.filters, {added_by: val});
+        this.filters = MultiFilters.updateFilters(this.filters, {added_by: val});
       },
 
       /**
@@ -337,7 +337,7 @@
 
         //Convert the value to a timestamp before saving it.
         const timestamp = new Date(val + 'T00:00:00Z').getTime();
-        this.filters = CustomFilters.updateFilters(this.filters, {start_date: timestamp});
+        this.filters = MultiFilters.updateFilters(this.filters, {start_date: timestamp});
       },
 
       /**
@@ -349,7 +349,7 @@
 
         //Convert the value to a timestamp before saving it.
         const timestamp = new Date(val + 'T00:00:00Z').getTime();
-        this.filters = CustomFilters.updateFilters(this.filters, {end_date: timestamp});
+        this.filters = MultiFilters.updateFilters(this.filters, {end_date: timestamp});
       },
 
 

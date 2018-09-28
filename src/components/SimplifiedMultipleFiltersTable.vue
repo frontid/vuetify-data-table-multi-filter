@@ -55,7 +55,6 @@
 </template>
 
 <script>
-  import CustomFilters from '@/plugins/CustomFilters';
 
   export default {
     data: () => ({
@@ -108,7 +107,7 @@
 
       customFilter(items, filters, filter, headers) {
         // Init the filter class.
-        const cf = new CustomFilters(items, filters, filter, headers);
+        const cf = new this.$MultiFilters(items, filters, filter, headers);
 
         cf.registerFilter('search', function (searchWord, items) {
           if (searchWord.trim() === '') return items;
@@ -139,14 +138,14 @@
        * Handler when user input something at the "Filter" text field.
        */
       filterSearch(val) {
-        this.filters = CustomFilters.updateFilters(this.filters, {search: val});
+        this.filters = this.$MultiFilters.updateFilters(this.filters, {search: val});
       },
 
       /**
        * Handler when user  select some author at the "Author" select.
        */
       filterAuthor(val) {
-        this.filters = CustomFilters.updateFilters(this.filters, {added_by: val});
+        this.filters = this.$MultiFilters.updateFilters(this.filters, {added_by: val});
       },
 
     }

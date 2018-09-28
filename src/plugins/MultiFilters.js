@@ -1,7 +1,7 @@
 /**
  * Enabled v-data-table to have moire than one filter.
  */
-class CustomFilters {
+class MultiFilters {
 
   /**
    * Constructor.
@@ -56,4 +56,11 @@ class CustomFilters {
 
 }
 
-export { CustomFilters as default };
+// Vue plugin.
+const MultiFiltersPlugin = {
+  install(Vue, options) {
+    Vue.prototype.$MultiFilters = MultiFilters;
+  }
+};
+
+export default MultiFiltersPlugin;
