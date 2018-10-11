@@ -132,7 +132,6 @@
         </v-flex>
 
         <v-flex>
-
             <v-card>
                 <v-card-title primary-title>
                     <h3>Filters log:</h3>
@@ -141,16 +140,12 @@
                     {{filters}}
                 </ul>
             </v-card>
-
-
         </v-flex>
 
     </v-layout>
 </template>
 
 <script>
-  import MultiFilters from '@/plugins/MultiFilters';
-
   export default {
     data: () => ({
       show_start_date: false,
@@ -318,14 +313,14 @@
        * Handler when user input something at the "Filter" text field.
        */
       filterSearch(val) {
-        this.filters = MultiFilters.updateFilters(this.filters, {search: val});
+        this.filters = this.$MultiFilters.updateFilters(this.filters, {search: val});
       },
 
       /**
        * Handler when user  select some author at the "Author" select.
        */
       filterAuthor(val) {
-        this.filters = MultiFilters.updateFilters(this.filters, {added_by: val});
+        this.filters = this.$MultiFilters.updateFilters(this.filters, {added_by: val});
       },
 
       /**
@@ -337,7 +332,7 @@
 
         //Convert the value to a timestamp before saving it.
         const timestamp = new Date(val + 'T00:00:00Z').getTime();
-        this.filters = MultiFilters.updateFilters(this.filters, {start_date: timestamp});
+        this.filters = this.$MultiFilters.updateFilters(this.filters, {start_date: timestamp});
       },
 
       /**
@@ -349,7 +344,7 @@
 
         //Convert the value to a timestamp before saving it.
         const timestamp = new Date(val + 'T00:00:00Z').getTime();
-        this.filters = MultiFilters.updateFilters(this.filters, {end_date: timestamp});
+        this.filters = this.$MultiFilters.updateFilters(this.filters, {end_date: timestamp});
       },
 
 
